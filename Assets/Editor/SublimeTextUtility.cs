@@ -8,7 +8,7 @@ using UnityEditorInternal;
 
 namespace OmnisharpForUnity
 {
-    internal class SublimeTextUtility
+    internal class SublimeTextUtility : BaseUtility
     {
         private static string sublimeProjectName
         {
@@ -47,7 +47,6 @@ namespace OmnisharpForUnity
         [MenuItem("Omnisharp/Sublime Text/Generate Sublime Project")]
         static void GenerateSublimeProject()
         {
-            var projectName = Path.GetFileName((Directory.GetParent(Application.dataPath).FullName));
 
             var text = "{\"folders\":[{\"follow_symlinks\":true,\"path\":\".\",\"file_exclude_patterns\":[\"*.sln\",\"*.csproj\",\"*.meta\",\"*.unityproj\",\"*.unitypackage\",],\"folder_exclude_patterns\":[\"Temp\",\"Library\",\"obj\",]}],\"solution_file\":\"#SOLUTION_FILE#\",\"settings\":{\"auto_complete_triggers\":[{\"characters\":\".\",\"selector\":\"source.cs\"}]}}";
 

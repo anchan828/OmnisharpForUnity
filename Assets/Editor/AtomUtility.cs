@@ -7,17 +7,8 @@ using UnityEditor.Callbacks;
 
 namespace OmnisharpForUnity
 {
-    internal class AtomUtility
+    internal class AtomUtility : BaseUtility
     {
-
-        private static string projectPath
-        {
-            get
-            {
-                return  Directory.GetParent(Application.dataPath).FullName;
-            }
-        }
-
         private static string atomPath
         {
             get
@@ -25,8 +16,6 @@ namespace OmnisharpForUnity
                 return InternalEditorUtility.GetExternalScriptEditor() + "/Contents/MacOS/Atom";
             }
         }
-
-
         private static bool usingAtom
         {
             get
@@ -38,22 +27,15 @@ namespace OmnisharpForUnity
         [MenuItem("Omnisharp/Atom/Create UnityAssemblies")]
         static void CreateUnityAssemblies()
         {
-
-
-            var unityAssembliesDirectoryPath = Path.Combine(projectPath, "Library/UnityAssemblies");
-
-
-            var scriptAssemblies = Directory.GetFiles("Library/ScriptAssemblies", "*.dll").Select(path => Path.GetFileName(path)).ToArray();
-
-
             Directory.CreateDirectory(unityAssembliesDirectoryPath);
 
-            foreach (var dllPath in AssemblyHelper.GetNamesOfAssembliesLoadedInCurrentDomain())
+            foreach (var dllPath in loadedAssemblyPaths)
             {
                 var dllName = Path.GetFileName(dllPath);
 
                 if (scriptAssemblies.Contains(dllName))
                     continue;
+                    
                 File.Copy(dllPath, Path.Combine(unityAssembliesDirectoryPath, dllName), true);
             }
         }
