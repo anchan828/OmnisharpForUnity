@@ -22,12 +22,7 @@ namespace OmnisharpForUnity
         {
             get
             {
-                var _sublPath = InternalEditorUtility.GetExternalScriptEditor() + "/Contents/SharedSupport/bin/subl";
-
-                if (!File.Exists(_sublPath))
-                    throw new FileNotFoundException("subl");
-
-                return _sublPath;
+                return InternalEditorUtility.GetExternalScriptEditor() + "/Contents/SharedSupport/bin/subl";
             }
         }
 
@@ -37,6 +32,14 @@ namespace OmnisharpForUnity
             get
             {
                 return File.Exists(sublimeProjectName);
+            }
+        }
+
+        private static bool usingSublimeText
+        {
+            get
+            {
+                return File.Exists(sublPath);
             }
         }
 
@@ -62,6 +65,8 @@ namespace OmnisharpForUnity
         [OnOpenAsset]
         static bool OnOpenAsset(int instanceID, int line)
         {
+            if(!usingSublimeText) return false;
+
             var obj = EditorUtility.InstanceIDToObject(instanceID);
 
             if (obj is TextAsset || obj is MonoScript)
