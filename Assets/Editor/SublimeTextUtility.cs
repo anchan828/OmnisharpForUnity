@@ -25,9 +25,7 @@ namespace OmnisharpForUnity
                 var _sublPath = InternalEditorUtility.GetExternalScriptEditor() + "/Contents/SharedSupport/bin/subl";
 
                 if (!File.Exists(_sublPath))
-                {
                     throw new FileNotFoundException("subl");
-                }
 
                 return _sublPath;
             }
@@ -48,9 +46,14 @@ namespace OmnisharpForUnity
         {
             var projectName = Path.GetFileName((Directory.GetParent(Application.dataPath).FullName));
 
-            var text = "{\"folders\":[{\"follow_symlinks\":true,\"path\":\".\",\"file_exclude_patterns\":[\"*.sln\",\"*.csproj\",\"*.meta\",\"*.unityproj\",\"*.unitypackage\",],\"folder_exclude_patterns\":[\"Temp\",\"Library\",\"obj\",]}],\"solution_file\":\"./#PROJECT_NAME#.sln\",\"settings\":{\"auto_complete_triggers\":[{\"characters\":\".\",\"selector\":\"source.cs\"}]}}";
+            var text = "{\"folders\":[{\"follow_symlinks\":true,\"path\":\".\",\"file_exclude_patterns\":[\"*.sln\",\"*.csproj\",\"*.meta\",\"*.unityproj\",\"*.unitypackage\",],\"folder_exclude_patterns\":[\"Temp\",\"Library\",\"obj\",]}],\"solution_file\":\"#SOLUTION_FILE#\",\"settings\":{\"auto_complete_triggers\":[{\"characters\":\".\",\"selector\":\"source.cs\"}]}}";
 
-            text = Regex.Replace(text, "#PROJECT_NAME#", projectName);
+            var solusionFileName = projectName + ".sln";
+
+            if (!File.Exists(solusionFileName))
+                EditorApplication.ExecuteMenuItem("Assets/Sync MonoDevelop Project");
+
+            text = Regex.Replace(text, "#SOLUTION_FILE#", solusionFileName);
 
             File.WriteAllText(projectName + ".sublime-project", text);
         }
@@ -64,18 +67,17 @@ namespace OmnisharpForUnity
             if (obj is TextAsset || obj is MonoScript)
             {
                 if (!isGeneratedProject)
-                {
-                    EditorApplication.ExecuteMenuItem("Assets/Sync MonoDevelop Project");
                     GenerateSublimeProject();
-                }
-                var args = GetSublArgs(AssetDatabase.GetAssetPath(instanceID), line);
+
+                var args = GetSublArgs(AssetDatabase.GetAssetPath(instanceID), Mathf.Clamp(line, 0, int.MaxValue));
                 System.Diagnostics.Process.Start(sublPath, string.Join(" ", args));
                 return true;
             }
+
             return false;
         }
 
-        private static string[] GetSublArgs(string filePath, int line = 0)
+        private static string[] GetSublArgs(string filePath, int line)
         {
             if (filePath == null)
                 throw new System.ArgumentNullException("filePath");
