@@ -7,7 +7,7 @@ using UnityEditor.Callbacks;
 
 namespace OmnisharpForUnity
 {
-    internal class AtomUtility : BaseUtility
+    public class AtomUtility : BaseUtility
     {
         private static string atomPath
         {
