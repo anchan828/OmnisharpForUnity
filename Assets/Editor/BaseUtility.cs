@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace OmnisharpForUnity
 {
-    public class BaseUtility
+    internal class BaseUtility
     {
         internal static string projectPath
         {

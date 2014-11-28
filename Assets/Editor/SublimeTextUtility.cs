@@ -8,7 +8,7 @@ using UnityEditorInternal;
 
 namespace OmnisharpForUnity
 {
-    public class SublimeTextUtility : BaseUtility
+    internal class SublimeTextUtility : BaseUtility
     {
         private static string sublimeProjectName
         {
