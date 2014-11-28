@@ -73,8 +73,8 @@ namespace OmnisharpForUnity
         {
             return new []
             {
-                projectPath,
-                filePath
+                "\"" + projectPath + "\"",
+                "\"" + filePath + "\""
             };
         }
 

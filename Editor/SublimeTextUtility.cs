@@ -90,8 +90,8 @@ namespace OmnisharpForUnity
             {
                 "-a",
                 "--project",
-                sublimeProjectName,
-                string.Format("{0}:{1}", filePath, line),
+                "\"" + sublimeProjectName + "\"",
+                "\"" + string.Format("{0}:{1}", filePath, line) + "\"",
             };
         }
     }
